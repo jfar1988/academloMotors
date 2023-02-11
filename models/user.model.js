@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const { db } = require('../database/db');
 
-const User = db.define('user', {
+const User = db.define('users', {
   id: {
     primaryKey: true,
     autoIncrement: true,
@@ -21,15 +21,14 @@ const User = db.define('user', {
     allowNull: false,
   },
   role: {
-    type: DataTypes.STRING,
+    type: DataTypes.ENUM('client', 'employee'),
     allowNull: false,
     defaultValue: 'client',
-    enum: ['client', 'employee'],
   },
   status: {
-    type: DataTypes.BOOLEAN,
+    type: DataTypes.ENUM('available', 'disabled'),
     allowNull: false,
-    defaultValue: true,
+    defaultValue: 'available',
   },
 });
 
