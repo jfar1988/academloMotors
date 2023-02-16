@@ -25,7 +25,8 @@ router.post(
       .not()
       .isEmpty()
       .isDate(),
-    check('userId', 'userId is mandatory and numeric').isNumeric(),
+    check('motorsNumber', 'motorsNumber is mandatory').not().isEmpty(),
+    check('description', 'description is mandatory').not().isEmpty(),
     validateFields,
   ],
   createRepair

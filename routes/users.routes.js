@@ -29,7 +29,7 @@ router.post(
     check('name', 'The email must be mandatory').not().isEmpty(),
     check('email', 'The email must be mandatory').not().isEmpty(),
     check('email', 'The email must contain an appropriate format').isEmail(),
-    check('password', 'The email must be mandatory').not().isEmpty(),
+    check('password', 'The password must be mandatory').not().isEmpty(),
     validateFields,
     checkIfEmailExists,
   ],

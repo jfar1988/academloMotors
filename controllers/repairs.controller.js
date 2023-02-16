@@ -45,11 +45,13 @@ exports.findRepairForId = catchAsync(async (req, res, next) => {
   });
 });
 exports.createRepair = catchAsync(async (req, res, next) => {
-  const { date, userId } = req.body;
+  const { date, motorsNumber, description } = req.body;
   const newRepair = await Repair.create({
     date,
-    userId,
+    motorsNumber,
+    description,
   });
+
   return res.status(201).json({
     status: 'SUCCESS',
     message: 'Created Repair was called 😃',
