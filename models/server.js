@@ -5,6 +5,7 @@ const { repairsRouter } = require('../routes/repairs.routes');
 const { db } = require('../database/db');
 const globalErrorHandler = require('../controllers/error.controller');
 const AppError = require('../helpers/appError');
+const { authRouter } = require('../routes/auth.routes');
 
 class Server {
   constructor() {
@@ -15,6 +16,7 @@ class Server {
     this.paths = {
       users: '/api/v1/users',
       repairs: '/api/v1/repairs',
+      auth: '/api/v1/auth',
     };
 
     //Metodo de conexion a DB
@@ -31,12 +33,10 @@ class Server {
   routes() {
     this.app.use(this.paths.users, usersRouter);
     this.app.use(this.paths.repairs, repairsRouter);
-    // this.app.all('*', (req, res, next) => {
-    //   res.status(404).json({
-    //     status: 'error',
-    //     message: `Can't find ${req.originalUrl} on this server!`,
-    //   });
-    // });
+    //Rutas de autenticación
+    this.app.use(this.paths.auth, authRouter);
+    this;
+
     this.app.all('*', (req, res, next) => {
       return next(
         new AppError(`Can't find ${req.originalUrl} on this server!`, 404)
@@ -49,7 +49,7 @@ class Server {
     db.authenticate()
       .then(() => console.log('DataBase Authenticated 😁'))
       .catch(err => console.log(err));
-    db.sync()
+    db.sync() //{ force: true }
       .then(() => console.log('Database Synced 😁'))
       .catch(err => console.log(err));
   }

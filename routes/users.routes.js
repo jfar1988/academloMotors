@@ -4,15 +4,12 @@ const { check } = require('express-validator');
 const {
   findAllUsers,
   findOneUser,
-  createUsers,
   updateUsers,
   deleteUser,
+  updatePassword,
 } = require('../controllers/users.controller');
 
-const {
-  checkIfUserExists,
-  checkIfEmailExists,
-} = require('../middlewares/users.middleware');
+const { checkIfUserExists } = require('../middlewares/users.middleware');
 const { validateFields } = require('../middlewares/validateField.middleware');
 
 check;
@@ -23,20 +20,20 @@ router.get('', findAllUsers);
 
 router.get('/:id', checkIfUserExists, findOneUser);
 
-router.post(
-  '',
-  [
-    check('name', 'The email must be mandatory').not().isEmpty(),
-    check('email', 'The email must be mandatory').not().isEmpty(),
-    check('email', 'The email must contain an appropriate format').isEmail(),
-    check('password', 'The password must be mandatory').not().isEmpty(),
-    validateFields,
-    checkIfEmailExists,
-  ],
-  createUsers
-);
-
 router.patch('/:id', checkIfUserExists, updateUsers);
+
+router.patch(
+  '/password/:id',
+  [
+    check('currentPass', 'The current password must be mandatory')
+      .not()
+      .isEmpty(),
+    check('newPass', 'The new password must be mandatory').not().isEmpty(),
+    validateFields,
+    checkIfUserExists,
+  ],
+  updatePassword
+);
 
 router.delete('/:id', checkIfUserExists, deleteUser);
 

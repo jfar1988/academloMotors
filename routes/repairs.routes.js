@@ -8,6 +8,7 @@ const {
   updateRepair,
   deleteRepair,
 } = require('../controllers/repairs.controller');
+const { protect } = require('../middlewares/auth.middleware');
 
 const { validRepairById } = require('../middlewares/repairs.middlewares');
 const { validateFields } = require('../middlewares/validateField.middleware');
@@ -27,6 +28,7 @@ router.post(
       .isDate(),
     check('motorsNumber', 'motorsNumber is mandatory').not().isEmpty(),
     check('description', 'description is mandatory').not().isEmpty(),
+    protect,
     validateFields,
   ],
   createRepair
