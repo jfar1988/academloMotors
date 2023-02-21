@@ -8,17 +8,23 @@ const {
   updateRepair,
   deleteRepair,
 } = require('../controllers/repairs.controller');
-const { protect } = require('../middlewares/auth.middleware');
+const {
+  protect,
+  protectAccountOwner,
+} = require('../middlewares/auth.middleware');
 
 const { validRepairById } = require('../middlewares/repairs.middlewares');
 const { validateFields } = require('../middlewares/validateField.middleware');
 
-check;
-
 const router = Router();
 
 router.get('', findAllRepairs);
-router.get('/:id', findRepairForId);
+
+//proteger las rutas(loguearse antes de hacer cualquier petición)
+router.use(protect);
+
+router.get('/:id', validRepairById, protectAccountOwner, findRepairForId);
+
 router.post(
   '',
   [
@@ -33,7 +39,7 @@ router.post(
   ],
   createRepair
 );
-router.patch('/:id', validRepairById, updateRepair);
-router.delete('/:id', validRepairById, deleteRepair);
+router.patch('/:id', validRepairById, protectAccountOwner, updateRepair);
+router.delete('/:id', validRepairById, protectAccountOwner, deleteRepair);
 
 module.exports = { repairsRouter: router };

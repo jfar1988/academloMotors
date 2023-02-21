@@ -27,6 +27,7 @@ const Repair = db.define('repairs', {
   },
   userId: {
     type: DataTypes.INTEGER,
+    allowNull: false,
   },
 });
 

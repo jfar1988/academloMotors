@@ -69,3 +69,27 @@ exports.login = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+exports.renewToken = catchAsync(async (req, res, next) => {
+  const { id } = req.sessionUser;
+
+  const token = await generateJWT(id);
+
+  const user = await User.findOne({
+    where: {
+      status: 'available',
+      id,
+    },
+  });
+
+  return res.status(200).json({
+    status: 'success',
+    token,
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    },
+  });
+});

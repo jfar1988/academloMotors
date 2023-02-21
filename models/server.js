@@ -6,6 +6,7 @@ const { db } = require('../database/db');
 const globalErrorHandler = require('../controllers/error.controller');
 const AppError = require('../helpers/appError');
 const { authRouter } = require('../routes/auth.routes');
+const initModel = require('./initModels');
 
 class Server {
   constructor() {
@@ -49,6 +50,9 @@ class Server {
     db.authenticate()
       .then(() => console.log('DataBase Authenticated 😁'))
       .catch(err => console.log(err));
+
+    initModel();
+
     db.sync() //{ force: true }
       .then(() => console.log('Database Synced 😁'))
       .catch(err => console.log(err));

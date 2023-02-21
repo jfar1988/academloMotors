@@ -6,6 +6,9 @@ const handleCastError22P02 = err =>
 const handleJWTError = err =>
   new AppError('Invalid Token. Please login again! 🤔', 401);
 
+const handleJWTExpiredError = () =>
+  new AppError('Your token has expired!. Please loggin again.', 401);
+
 const sendErrorDev = (err, res) => {
   res.status(err.statusCode).json({
     status: err.status,
@@ -47,6 +50,7 @@ const globalErrorHandler = (err, req, res, next) => {
 
     if (error.parent?.code === '22P02') error = handleCastError22P02(error);
     if (error.name === 'JsonWebTokenError') error = handleJWTError(error);
+    if (error.name == 'TokenExpiredError') error = handleJWTExpiredError(error);
 
     sendErrorProd(error, res);
   }

@@ -1,6 +1,7 @@
 const AppError = require('../helpers/appError');
 const catchAsync = require('../helpers/catchAsync');
 const Repair = require('../models/repair.model');
+const User = require('../models/user.model');
 
 exports.validRepairById = catchAsync(async (req, res, next) => {
   //Obtengo el id por parametro /:id
@@ -11,8 +12,15 @@ exports.validRepairById = catchAsync(async (req, res, next) => {
       id,
       // status: 'pending', si pongo esto ya no me valida las condiciones de los if
     },
+    //me traigo el modelo usuario solo sí tiene relacion con otra tabla
+    include: [
+      {
+        model: User,
+      },
+    ],
   });
-  //validar sí la repacion fue completada sino enviar error
+
+  // validar sí la repacion fue completada sino enviar error
   if (repair.status === 'completed') {
     return next(new AppError('The repair was completed', 404));
   }
@@ -26,5 +34,6 @@ exports.validRepairById = catchAsync(async (req, res, next) => {
   //   });
   // }
   req.repair = repair;
+  req.user = repair.user;
   next();
 });
