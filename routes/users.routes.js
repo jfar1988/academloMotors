@@ -23,10 +23,10 @@ const router = Router();
 
 router.get('', findAllUsers);
 
-router.get('/:id', checkIfUserExists, findOneUser);
-
 //proteger las rutas(loguearse antes de hacer cualquier petición)
 router.use(protect);
+
+router.get('/:id', checkIfUserExists, findOneUser);
 
 router.patch('/:id', checkIfUserExists, protectAccountOwner, updateUsers);
 

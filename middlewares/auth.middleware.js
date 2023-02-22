@@ -13,6 +13,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   ) {
     token = req.headers.authorization.split(' ')[1];
   }
+
   if (!token) {
     return next(
       new AppError('You are not logged in! Please log in to get access', 401)
@@ -64,9 +65,8 @@ exports.protect = catchAsync(async (req, res, next) => {
 exports.protectAccountOwner = catchAsync(async (req, res, next) => {
   const { user, sessionUser } = req;
 
-  console.log(sessionUser);
   //sí el usuario autenticado desea hacer la petición a un usuario diferente a él, salta el error
-  if (user.id !== sessionUser.id) {
+  if (user.id !== sessionUser.id && sessionUser.role !== 'employee') {
     return next(new AppError('You do not own this account', 401));
   }
   //continua

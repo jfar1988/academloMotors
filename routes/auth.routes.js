@@ -25,6 +25,7 @@ router.post(
   validateFields,
   createUsers
 );
+
 router.post(
   '/login',
   [

@@ -11,6 +11,7 @@ const {
 const {
   protect,
   protectAccountOwner,
+  restrictTo,
 } = require('../middlewares/auth.middleware');
 
 const { validRepairById } = require('../middlewares/repairs.middlewares');
@@ -18,12 +19,18 @@ const { validateFields } = require('../middlewares/validateField.middleware');
 
 const router = Router();
 
-router.get('', findAllRepairs);
-
 //proteger las rutas(loguearse antes de hacer cualquier petición)
 router.use(protect);
 
-router.get('/:id', validRepairById, protectAccountOwner, findRepairForId);
+router.get('', restrictTo('employee'), findAllRepairs);
+
+router.get(
+  '/:id',
+  validRepairById,
+  protectAccountOwner,
+  restrictTo('employee'),
+  findRepairForId
+);
 
 router.post(
   '',
@@ -39,7 +46,21 @@ router.post(
   ],
   createRepair
 );
-router.patch('/:id', validRepairById, protectAccountOwner, updateRepair);
-router.delete('/:id', validRepairById, protectAccountOwner, deleteRepair);
+
+router.patch(
+  '/:id',
+  validRepairById,
+  protectAccountOwner,
+  restrictTo('employee'),
+  updateRepair
+);
+
+router.delete(
+  '/:id',
+  validRepairById,
+  protectAccountOwner,
+  restrictTo('employee'),
+  deleteRepair
+);
 
 module.exports = { repairsRouter: router };
